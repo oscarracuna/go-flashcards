@@ -19,14 +19,15 @@ func openCsvFile(csvPath string) [][]string {
 	if err != nil {
 		log.Fatal("Unable to parse the file as csv..." + csvPath, err)
 	}
-
 	return records
-
 }
 
-
 func main() {
-	fmt.Println("test")
-	records := openCsvFile("deck.csv")
-	fmt.Println(records)
+	records := openCsvFile("test.csv")
+
+		for _, row := range records {
+		if len(row) >= 2 {
+			fmt.Printf("Q: %s\nA: %s\n\n", row[0], row[1])
+		}
+	}
 }
