@@ -7,6 +7,12 @@ import (
 	"os"
 )
 
+type Flashcard struct {
+	Question string
+	Answer   string
+}
+
+
 func openCsvFile(csvPath string) [][]string {
 	f, err := os.Open(csvPath)
 	if err != nil {
