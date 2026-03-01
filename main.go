@@ -9,6 +9,19 @@ import (
 	"os"
 )
 
+var (
+ Reset = "\033[0m"
+ Red = "\033[31m"
+ Green = "\033[32m"
+ Yellow = "\033[33m"
+ Blue = "\033[34m"
+ Magenta = "\033[35m"
+ Cyan = "\033[36m"
+ Gray = "\033[37m"
+ White = "\033[97m"
+)
+
+
 type Pair struct {
 	Q string
 	A string
@@ -60,8 +73,14 @@ func randomSelection()  (string, string) {
 }
 
 func main() {
-	fmt.Println("Question # <WIP> lol:")
+	//TODO: Implement quesiton count
+	fmt.Println("Question # $questionNumber:\n\n")
 	q, a := randomSelection()
-	fmt.Println(q)
-	fmt.Println(a)
+	fmt.Println("Question:", q)
+	
+	//There has to be a better way to implement this. I haven't had good experiences with Scanln
+	fmt.Println(Yellow + "\n\nType the command or answer and then press enter to reveal the answer..." + Reset)
+	fmt.Print("Command -> $ ")
+	fmt.Scanln()
+	fmt.Println(Green + a + Reset)
  }
