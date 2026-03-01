@@ -8,6 +8,7 @@ import (
 	"time"
 	"math/rand"
 	"os"
+	"os/exec"
 )
 
 var (
@@ -73,23 +74,33 @@ func getFlashcards()  (string, string) {
 	return question,answer
 }
 
-func initSession() {
+func displayQuestion() {
 	scanner := bufio.NewScanner(os.Stdin)
 
-	//TODO: Implement quesiton count
-	fmt.Println("Question # $questionNumber:\n\n")
-	q, a := getFlashcards()
-	fmt.Println("Question:", q)
-	
-	//There has to be a better way to implement this. I haven't had good experiences with Scanln
-	//Turns out we can use bufio.Scanner. scanln sucks lol.
-	fmt.Println(Yellow + "\n\nType the command or answer and then press enter to reveal the answer..." + Reset)
-	fmt.Print("-> $ ")
-	scanner.Scan()
-	fmt.Println(Green + a + Reset)
+	counter := 1
+	i := 1
+	for i == 1 {
+		fmt.Printf(Yellow+ "Question #%v:\n" + Reset, counter)
+		q, a := getFlashcards()
+		fmt.Println(q)
+		
+		fmt.Println(Yellow + "\nType the command or answer and then press enter to reveal the answer..." + Reset)
+		fmt.Print("-> $ ")
+		scanner.Scan()
+		
+		fmt.Println(Green + "\nAnswer:" + Reset)
+		fmt.Println(a)
+		
+		fmt.Println(Yellow + "\nPress enter to go to the next question or press ctrl+c to exit." + Reset)
+		scanner.Scan()
+		cmd := exec.Command("clear")
+		cmd.Stdout = os.Stdout
+		cmd.Run()
+		counter += 1
+	}
 }
 
-
 func main() {
-	initSession()
+	fmt.Print(Green + "Welcome back!\nEnjoy your study session.\n\n" + Reset)
+	displayQuestion()
 }
