@@ -9,11 +9,6 @@ import (
 	"os"
 )
 
-type Flashcard struct {
-	Question string
-	Answer   string
-}
-
 type Pair struct {
 	Q string
 	A string
@@ -34,13 +29,11 @@ func openCsvFile(csvPath string) [][]string {
 	return records
 }
 
-
 func randomSelection()  (string, string) {
 	var pairs []Pair
 
 	records := openCsvFile("test.csv")
 	rand.Seed(time.Now().Unix())
-
 
 	for i, record := range records {
 		if i == 0{
@@ -64,7 +57,6 @@ func randomSelection()  (string, string) {
 	question := fmt.Sprint(randomPair.Q) 
 	answer :=  fmt.Sprint(randomPair.A)
 	return question,answer
-
 }
 
 func main() {
@@ -72,5 +64,4 @@ func main() {
 	q, a := randomSelection()
 	fmt.Println(q)
 	fmt.Println(a)
-
  }
