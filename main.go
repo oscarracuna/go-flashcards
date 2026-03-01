@@ -29,7 +29,7 @@ type Pair struct {
 	A string
 }
 
-func openCsvFile(csvPath string) [][]string {
+func getCsv(csvPath string) [][]string {
 	f, err := os.Open(csvPath)
 	if err != nil {
 		log.Fatal("Unable to open file..." + csvPath, err)
@@ -47,7 +47,7 @@ func openCsvFile(csvPath string) [][]string {
 func getFlashcards()  (string, string) {
 	var pairs []Pair
 
-	records := openCsvFile("test.csv")
+	records := getCsv("test.csv")
 	rand.Seed(time.Now().Unix())
 
 	for i, record := range records {
@@ -93,14 +93,22 @@ func displayQuestion() {
 		
 		fmt.Println(Yellow + "\nPress enter to go to the next question or press ctrl+c to exit." + Reset)
 		scanner.Scan()
-		cmd := exec.Command("clear")
-		cmd.Stdout = os.Stdout
-		cmd.Run()
+		clearScreen()
 		counter += 1
 	}
 }
 
+func clearScreen() {
+	cmd := exec.Command("clear")
+	cmd.Stdout = os.Stdout
+	cmd.Run()
+}
+
+
 func main() {
 	fmt.Print(Green + "Welcome back!\nEnjoy your study session.\n\n" + Reset)
+	fmt.Println("Press enter to continue...")
+	fmt.Scanln()
+	clearScreen()
 	displayQuestion()
 }
