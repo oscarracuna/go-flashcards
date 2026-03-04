@@ -47,7 +47,7 @@ func getCsv(csvPath string) [][]string {
 func getFlashcards()  (string, string) {
 	var pairs []Pair
 
-	records := getCsv("test.csv")
+	records := getCsv("../test.csv")
 	rand.Seed(time.Now().Unix())
 
 	for i, record := range records {
