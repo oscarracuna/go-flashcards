@@ -9,6 +9,7 @@ import (
 	"math/rand"
 	"os"
 	"os/exec"
+	"github.com/oscarracuna/go-flashcards/ui"
 )
 
 var (
@@ -106,6 +107,7 @@ func clearScreen() {
 
 
 func main() {
+	ui.DisplayThingy()
 	fmt.Print(Green + "Welcome back!\nEnjoy your study session.\n\n" + Reset)
 	fmt.Println("Press enter to continue...")
 	fmt.Scanln()
