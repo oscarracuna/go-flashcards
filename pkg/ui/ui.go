@@ -80,4 +80,5 @@ func displayThing() {
 	if m, ok := m.(model); ok && m.choice != "" {
 		fmt.Printf("\n---\nYou chose %s!\n", m.choice)
 	}
+	return m
 }

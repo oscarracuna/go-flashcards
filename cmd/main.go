@@ -9,7 +9,8 @@ import (
 	"math/rand"
 	"os"
 	"os/exec"
-	"github.com/oscarracuna/go-flashcards/ui"
+	"strings"
+	tea "charm.land/bubbletea/v2"
 )
 
 var (
@@ -25,6 +26,91 @@ var (
 )
 
 
+//==================
+// Start of UI thing
+//==================
+var choices = []string{"Option1", "Option2", "option3"}
+
+type model struct {
+	cursor int
+	choice string
+}
+
+func (m model) Init() tea.Cmd {
+	return nil
+}
+
+func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	switch msg := msg.(type) {
+	case tea.KeyPressMsg:
+		switch msg.String() {
+		case "ctrl+c", "q", "esc":
+			return m, tea.Quit
+
+		case "enter":
+			// Send the choice on the channel and exit.
+			m.choice = choices[m.cursor]
+			return m, tea.Quit
+
+		case "down", "j":
+			m.cursor++
+			if m.cursor >= len(choices) {
+				m.cursor = 0
+			}
+
+		case "up", "k":
+			m.cursor--
+			if m.cursor < 0 {
+				m.cursor = len(choices) - 1
+			}
+		}
+	}
+
+	return m, nil
+}
+
+func (m model) View() tea.View {
+	s := strings.Builder{}
+	s.WriteString("Here you have a couple of options.\n\n")
+
+	for i := range choices {
+		if m.cursor == i {
+			s.WriteString("(•) ")
+		} else {
+			s.WriteString("( ) ")
+		}
+		s.WriteString(choices[i])
+		s.WriteString("\n")
+	}
+	s.WriteString("\n(press q to quit)\n")
+
+	return tea.NewView(s.String())
+}
+
+func displayThing() {
+	p := tea.NewProgram(model{})
+
+	// Run returns the model as a tea.Model.
+	m, err := p.Run()
+	if err != nil {
+		fmt.Println("Oh no:", err)
+		os.Exit(1)
+	}
+
+	// Assert the final tea.Model to our local model and print the choice.
+	if m, ok := m.(model); ok && m.choice != "" {
+		fmt.Printf("\n---\nYou chose %s!\n", m.choice)
+	}
+}
+
+
+//=================
+// End of UI thing
+//=================
+
+
+
+
 type Pair struct {
 	Q string
 	A string
@@ -33,14 +119,14 @@ type Pair struct {
 func getCsv(csvPath string) [][]string {
 	f, err := os.Open(csvPath)
 	if err != nil {
-		log.Fatal("Unable to open file..." + csvPath, err)
+		log.Fatal("Unable to open file -> " + csvPath, err)
 	}
 	defer f.Close()
 
 	csvReader := csv.NewReader(f)
 	records, err := csvReader.ReadAll()
 	if err != nil {
-		log.Fatal("Unable to parse the file as csv..." + csvPath, err)
+		log.Fatal("Unable to parse the file as csv -> " + csvPath, err)
 	}
 	return records
 }
@@ -48,7 +134,7 @@ func getCsv(csvPath string) [][]string {
 func getFlashcards()  (string, string) {
 	var pairs []Pair
 
-	records := getCsv("../test.csv")
+	records := getCsv("test.csv")
 	rand.Seed(time.Now().Unix())
 
 	for i, record := range records {
@@ -107,7 +193,7 @@ func clearScreen() {
 
 
 func main() {
-	ui.DisplayThingy()
+	displayThing()
 	fmt.Print(Green + "Welcome back!\nEnjoy your study session.\n\n" + Reset)
 	fmt.Println("Press enter to continue...")
 	fmt.Scanln()
