@@ -169,9 +169,13 @@ func getFlashcards()  (string, string) {
 func displayQuestion() {
 	scanner := bufio.NewScanner(os.Stdin)
 
+	
 	counter := 1
 	i := 1
 	for i == 1 {
+		
+		clearScreen()
+
 		fmt.Printf(Yellow+ "Question #%v:\n" + Reset, counter)
 		q, a := getFlashcards()
 		fmt.Println(q)
@@ -185,13 +189,11 @@ func displayQuestion() {
 		
 		fmt.Println(Yellow + "\nPress enter to go to the next question or press ctrl+c to exit." + Reset)
 		scanner.Scan()
-		clearScreen()
 		counter += 1
 	}
 }
 
 func initCommandPractice() {
-	clearScreen()
 	displayQuestion()
 }
 
