@@ -29,7 +29,7 @@ var (
 //==================
 // Start of UI thing
 //==================
-var choices = []string{"Option1", "Option2", "option3"}
+var choices = []string{"one", "two", "three"}
 
 type model struct {
 	cursor int
@@ -71,7 +71,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m model) View() tea.View {
 	s := strings.Builder{}
-	s.WriteString("Here you have a couple of options.\n\n")
+	s.WriteString("Welcome back!\nEnjoy your study session.\n\nWhat are we studying today?\n")
 
 	for i := range choices {
 		if m.cursor == i {
@@ -87,19 +87,27 @@ func (m model) View() tea.View {
 	return tea.NewView(s.String())
 }
 
-func displayThing() {
+
+//TODO: Here we can have the func return the choice
+//And then have main or other funciton redirect to something 
+//like initCommandPractice() or initMultipleChoice()
+func displayMenu() {
 	p := tea.NewProgram(model{})
 
-	// Run returns the model as a tea.Model.
 	m, err := p.Run()
 	if err != nil {
 		fmt.Println("Oh no:", err)
 		os.Exit(1)
 	}
 
-	// Assert the final tea.Model to our local model and print the choice.
 	if m, ok := m.(model); ok && m.choice != "" {
 		fmt.Printf("\n---\nYou chose %s!\n", m.choice)
+		if m.choice == "one"{
+			initCommandPractice()
+		} else {
+			fmt.Println("under development, lol")
+			os.Exit(1)
+		}
 	}
 }
 
@@ -107,9 +115,6 @@ func displayThing() {
 //=================
 // End of UI thing
 //=================
-
-
-
 
 type Pair struct {
 	Q string
@@ -185,6 +190,11 @@ func displayQuestion() {
 	}
 }
 
+func initCommandPractice() {
+	clearScreen()
+	displayQuestion()
+}
+
 func clearScreen() {
 	cmd := exec.Command("clear")
 	cmd.Stdout = os.Stdout
@@ -193,10 +203,5 @@ func clearScreen() {
 
 
 func main() {
-	displayThing()
-	fmt.Print(Green + "Welcome back!\nEnjoy your study session.\n\n" + Reset)
-	fmt.Println("Press enter to continue...")
-	fmt.Scanln()
-	clearScreen()
-	displayQuestion()
+	displayMenu()
 }
